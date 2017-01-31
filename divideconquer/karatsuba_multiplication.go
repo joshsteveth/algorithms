@@ -23,19 +23,28 @@ import (
 
 //basic multiplication func which use B=10 and m=half power of smallest number
 //sort the input ints first and determine value of m
+//handle negative with absolute value and then multiply it with -1 if needed
 func KaratsubaMult(a, b int) int {
+	var useNeg bool
+	if (a < 0 && b > 0) || (a > 0 && b < 0) {
+		useNeg = true
+	}
+	a, b = absInt(a), absInt(b)
+
 	m := getMValue(a, b)
-	fmt.Printf("m is: %d\n", m)
 
 	x1, x0 := separateInts(a, m)
 	y1, y0 := separateInts(b, m)
-	fmt.Printf("x1, x0 : %d, %d\n", x1, x0)
-	fmt.Printf("y1, y0 : %d, %d\n", y1, y0)
 
 	z2, z0 := x1*y1, x0*y0
 	z1 := (x1+x0)*(y1+y0) - z0 - z2
 
-	return (z2 * int(math.Pow10(m*2))) + (z1 * int(math.Pow10(m))) + z0
+	result := (z2 * int(math.Pow10(m*2))) + (z1 * int(math.Pow10(m))) + z0
+	if useNeg {
+		result = result * -1
+	}
+
+	return result
 }
 
 func getMValue(a, b int) int {
