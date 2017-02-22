@@ -68,7 +68,6 @@ func karatsuba(a, b string) string {
 	}
 
 	m := getMValueString(a, b)
-	fmt.Printf("m: %d, a: %s, b: %s\n", m, a, b)
 
 	//separate x into x1 and x0
 	x1, x0 := separateIntsString(a, m)
@@ -76,17 +75,12 @@ func karatsuba(a, b string) string {
 
 	z2, z0 := karatsuba(x1, y1), karatsuba(x0, y0)
 	z1 := karatsuba(addString(x1, x0), addString(y1, y0))
-	z1 = deductString(z1, z0)
-	z1 = deductString(z1, z2)
+	z1 = deductString(deductString(z1, z0),z2)
 
 	result1 := multStringLong(z2, powerOf("1", m*2))
 	result2 := multStringLong(z1, powerOf("1", m))
 
-	result := addString(result1, result2)
-	fmt.Println(result)
-	result = addString(result, z0)
-	fmt.Println(result)
-	return result
+	return addString(addString(result1, result2), z0)
 }
 
 func getMValueString(a, b string) int {
